@@ -17,9 +17,13 @@
                             <thead>
                                 <th><?php echo _l('id'); ?></th>
                                 <th><?php echo _l('leads_status_table_name'); ?></th>
+                                <th><?php echo _l('Account'); ?></th>
                                 <th><?php echo _l('options'); ?></th>
                             </thead>
                             <tbody>
+                                <?php
+                                $accounts = [1 => 'Real State', 2 => 'Solar'];
+                                ?>
                                 <?php foreach ($statuses as $status) { ?>
                                 <tr>
                                     <td>
@@ -33,6 +37,9 @@
                                             data-order="<?php echo e($status['statusorder']); ?>"><?php echo e($status['name']); ?></a><br />
                                         <span class="text-muted">
                                             <?php echo _l('leads_table_total', total_rows(db_prefix() . 'leads', ['status' => $status['id']])); ?></span>
+                                    </td>
+                                    <td>
+                                        <?php echo $accounts[$status['account']]; ?>
                                     </td>
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">

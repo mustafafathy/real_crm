@@ -162,71 +162,63 @@ elseif (is_admin($staff_id) or ($role == 3)) {
                         <div class="status-bar tw-grid-cols-6 sm:tw-grid-cols-6 lg:tw-grid-cols-9 tw-gap-4">
                             <div class="summary-item card-1">
                                 Pending<br><span
-                                    class="count"><?php echo $statusList['pending']['total'] ?? 0; ?></span>
+                                    class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['pending']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-2">
                                 Qualified<br><span
-                                    class="count"><?php echo $statusList['qualified']['total'] ?? 0; ?></span>
+                                    class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['qualified']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-3">
                                 Disqualified<br><span
-                                    class="count"><?php echo $statusList['disqualified']['total'] ?? 0; ?></span>
+                                    class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['disqualified']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-4">
-                                IVE<br><span class="count"><?php echo $statusList['ive']['total'] ?? 0; ?></span>
+                                IVE<br><span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['ive']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-5">
-                                Pushed<br><span class="count"><?php echo $statusList['pushed']['total'] ?? 0; ?></span>
+                                Pushed<br><span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['pushed']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-6">
                                 Callback<br><span
-                                    class="count"><?php echo $statusList['callback']['total'] ?? 0; ?></span>
+                                    class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['callback']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-7">
                                 Duplicate<br><span
-                                    class="count"><?php echo $statusList['duplicate']['total'] ?? 0; ?></span>
+                                    class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['duplicate']['total'] : '--' ?></span>
                             </div>
                             <div class="summary-item card-8">
-                                Glitch<br><span class="count"><?php echo $statusList['glitch']['total'] ?? 0; ?></span>
+                                Glitch<br><span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['glitch']['total'] : '--' ?></span>
                             </div>
                             <!-- <div class="summary-item re-lost-leads">
-                Lost Leads<br><span class="count"><?php echo $statusList['lost leads']['total'] ?? 0; ?></span>
+                Lost Leads<br><span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? $statusList['lost leads']['total'] : '--' ?></span>
             </div> -->
                         </div>
                     </div>
                     <div class="solar-summary" style="display: none;">
                         <div class="status-bar tw-grid-cols-6 sm:tw-grid-cols-6 lg:tw-grid-cols-8 tw-gap-4">
                             <div class="summary-item card-1">
-                                Appts Booked<br><span class="count">--<?php
-                                //echo $statusList['booked']['total'] ?? 0; ?></span>
+                                Appts Booked<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['booked']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-2">
-                                In-Home<br><span class="count">--<?php
-                                //echo $statusList['in-home']['total'] ?? 0; ?></span>
+                                In-Home<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['in-home']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-3">
-                                Virtual<br><span class="count">--<?php
-                                //echo $statusList['virtual']['total'] ?? 0; ?></span>
+                                Virtual<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['virtual']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-4">
-                                Rescheduled<br><span class="count">--<?php
-                                //echo $statusList['rescheduled']['total'] ?? 0; ?></span>
+                                Rescheduled<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['rescheduled']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-5">
-                                Phone Call<br><span class="count">--<?php
-                                //echo $statusList['phone call']['total'] ?? 0; ?></span>
+                                Phone Call<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['phone call']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-6">
-                                Show Up<br><span class="count">--<?php
-                                //echo $statusList['show up']['total'] ?? 0; ?></span>
+                                Show Up<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['show up']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-7">
-                                Missing<br><span class="count">--<?php
-                                //echo $statusList['missing']['total'] ?? 0; ?></span>
+                                Missing<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['missing']['total'] ?? 0 : '--'?></span>
                             </div>
                             <div class="summary-item card-8">
-                                IVE<br><span class="count">--<?php
-                                //echo $statusList['ive']['total'] ?? 0; ?></span>
+                                IVE<br><span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? $statusList['ive']['total'] ?? 0 : '--'?></span>
                             </div>
                         </div>
                     </div>
@@ -591,15 +583,15 @@ elseif (is_admin($staff_id) or ($role == 3)) {
                     <div class="widget-content full-flex ">
                         <div
                             class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                            Target<span class="count"><?php echo ($totalTarget) ?></span>
+                            Target<span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? ($totalTarget) : '--' ?></span>
                         </div>
                         <div
                             class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                            Achieved<span class="count"><?php echo ($totalAchieved) ?></span>
+                            Achieved<span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? ($totalAchieved) : '--' ?></span>
                         </div>
                         <div
                             class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                            Missing<span class="count"><?php echo ($totalMissing) ?></span>
+                            Missing<span class="count"><?= in_array(get_staff_account_type(), [1,3]) ? ($totalMissing) : '--' ?></span>
                         </div>
                     </div>
                 </div>
@@ -645,11 +637,11 @@ elseif (is_admin($staff_id) or ($role == 3)) {
                         <div class="widget-content full-flex ">
                             <div
                                 class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                                Virtual<span class="count">--</span>
+                                Virtual<span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? 0 : '--' ?></span>
                             </div>
                             <div
                                 class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                                In-Home<span class="count">--</span>
+                                In-Home<span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? 0 : '--' ?></span>
                             </div>
                         </div>
                     </div>
@@ -667,11 +659,11 @@ elseif (is_admin($staff_id) or ($role == 3)) {
                     <div class="widget-content full-flex ">
                         <div
                             class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                            Target<span class="count">--</span>
+                            Target<span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? 0 : '--' ?></span>
                         </div>
                         <div
                             class="tw-flex-1 card-element tw-bg-gray-100   tw-text-center full-flex tw-flex-col tw-justify-between">
-                            Missing<span class="count">--</span>
+                            Missing<span class="count"><?= in_array(get_staff_account_type(), [2,3]) ? 0 : '--' ?></span>
                         </div>
                     </div>
                 </div>

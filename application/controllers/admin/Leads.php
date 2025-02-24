@@ -28,6 +28,13 @@ class Leads extends AdminController
             access_denied('Leads');
         }
 
+        $account = $this->input->get('account');
+        if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+            blank_page('You are trying to access not existed page!');
+        }
+        $this->session->set_userdata('category', $account);
+        $category = $account;
+
         // Load the leads model to access its methods
         $this->load->model('leads_model');
 
@@ -51,7 +58,7 @@ class Leads extends AdminController
         $data['summary'] = get_leads_summary();
 
         // Fetch lead statuses and sources
-        $data['statuses'] = $this->leads_model->get_status();
+        $data['statuses'] = $this->leads_model->get_status(null, [], $account);
         $data['sources'] = $this->leads_model->get_source();
 
         // Set page title
@@ -83,12 +90,12 @@ class Leads extends AdminController
        
         // Apply category filter if 'cat' is passed, else fetch all leads
         if (isset($category)) {
-            $this->session->set_userdata('account_category', $category);
+            $this->session->set_userdata('category', $category);
             // Fetch leads based on the selected category
             $data['leads'] = $this->leads_model->get('', [], $category);
         } else {
           
-			$category = $this->session->userdata('account_category');
+			$category = $this->session->userdata('category');
            	$data['leads'] = $this->leads_model->get('', [], $category);
         }
         $data['category'] =$category;
@@ -106,7 +113,7 @@ class Leads extends AdminController
         $category = $this->input->post('searchCategory');
     
         // Save category to session
-        $this->session->set_userdata('account_category', $category);
+        $this->session->set_userdata('category', $category);
     
         // Return a response
         echo json_encode(array('status' => 'success', 'category' => $category));
@@ -239,12 +246,17 @@ class Leads extends AdminController
             die;
         }
 
+        $account = $this->session->userdata('category');
+        if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+            // blank_page('You are trying to access not existed page!');
+            ajax_access_denied();
+        }
         echo json_encode([
-            'leadView' => $this->_get_lead_data($id),
+            'leadView' => $this->_get_lead_data($id, $account),
         ]);
     }
 
-    private function _get_lead_data($id = '')
+    private function _get_lead_data($id = '', $account = null)
     {
         $reminder_data = '';
         $data['lead_locked'] = false;
@@ -301,9 +313,10 @@ class Leads extends AdminController
             $data['total_proposals'] = $leadProfileBadges->getCount('proposals');
         }
 
+        $account = $this->session->userdata('category');
 
-        $data['statuses'] = $this->leads_model->get_status();
-        $data['sources'] = $this->leads_model->get_source();
+        $data['statuses'] = $this->leads_model->get_status('', [], $account);
+        $data['sources'] = $this->leads_model->get_source(false, $account);
 
         $data = hooks()->apply_filters('lead_view_data', $data);
 
@@ -585,9 +598,14 @@ class Leads extends AdminController
                 $this->leads_model->log_lead_activity($data['leadid'], 'not_lead_activity_converted', false, serialize([
                     get_staff_full_name(),
                 ]));
+                $account = $this->session->userdata('category');
+                if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+                    // blank_page('You are trying to access not existed page!');
+                    ajax_access_denied();
+                }
                 $default_status = $this->leads_model->get_status('', [
                     'isdefault' => 1,
-                ]);
+                ], $account);
                 $this->db->where('id', $data['leadid']);
                 $this->db->update(db_prefix() . 'leads', [
                     'date_converted' => date('Y-m-d H:i:s'),
@@ -913,7 +931,12 @@ class Leads extends AdminController
         $this->load->model('roles_model');
         $data['roles'] = $this->roles_model->get();
         $data['sources'] = $this->leads_model->get_source();
-        $data['statuses'] = $this->leads_model->get_status();
+        $account = $this->session->userdata('category');
+        if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+            // blank_page('You are trying to access not existed page!');
+            ajax_access_denied();
+        }
+        $data['statuses'] = $this->leads_model->get_status('', [], $account);
 
         $data['members'] = $this->staff_model->get('', [
             'active' => 1,
@@ -1328,7 +1351,12 @@ class Leads extends AdminController
         }
         $data['roles'] = $this->roles_model->get();
         $data['sources'] = $this->leads_model->get_source();
-        $data['statuses'] = $this->leads_model->get_status();
+        $account = $this->session->userdata('category');
+        if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+            // blank_page('You are trying to access not existed page!');
+            ajax_access_denied();
+        }
+        $data['statuses'] = $this->leads_model->get_status('', [], $account);
 
         $data['members'] = $this->staff_model->get('', [
             'active' => 1,
@@ -1382,7 +1410,12 @@ class Leads extends AdminController
             }
         }
 
-        $data['statuses'] = $this->leads_model->get_status();
+        $account = $this->session->userdata('category');
+        if(!in_array($account, ['1', '2']) || !in_array(get_staff_account_type(), [$account, '3'])) {
+            // blank_page('You are trying to access not existed page!');
+            ajax_access_denied();
+        }
+        $data['statuses'] = $this->leads_model->get_status('', [], $account);
         $data['sources'] = $this->leads_model->get_source();
         $data['members'] = $this->staff_model->get('', ['is_not_staff' => 0, 'active' => 1]);
 

@@ -4827,12 +4827,12 @@ function lead_add_inline_select_submit(type) {
 }
 
 // Init lead for add/edit/view or refresh data
-function init_lead(id, isEdit) {
+function init_lead(id, isEdit, type=undefined) {
   if ($("#task-modal").is(":visible")) {
     $("#task-modal").modal("hide");
   }
   // In case header error
-  if (init_lead_modal_data(id, undefined, isEdit)) {
+  if (init_lead_modal_data(id, undefined, isEdit, type)) {
     $("#lead-modal").modal("show");
   }
 }
@@ -5079,7 +5079,7 @@ function _lead_init_data(data, id) {
 }
 
 // Fetches lead modal data, can be edit/add/view
-function init_lead_modal_data(id, url, isEdit) {
+function init_lead_modal_data(id, url, isEdit, type) {
   var requestURL =
     (typeof url != "undefined" ? url : "leads/lead/") +
     (typeof id != "undefined" ? id : "");
@@ -5091,7 +5091,7 @@ function init_lead_modal_data(id, url, isEdit) {
     }
     requestURL += concat + "edit=true";
   }
-
+  requestURL += '&account=' + type;
   requestGetJSON(requestURL)
     .done(function (response) {
       _lead_init_data(response, id);

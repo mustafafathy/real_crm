@@ -106,8 +106,8 @@
                      // Database credentials
                      $hostname = "localhost";
                      $username = "crm";
-                     $password = "SgMGLDSKLq9FTGV";
-                     $database = "crm";
+                     $password = "";
+                     $database = "real_crm";
 
                         // Connect to the database
                         $mysqli = new mysqli($hostname, $username, $password, $database);

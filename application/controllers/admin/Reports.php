@@ -47,6 +47,8 @@ class Reports extends AdminController
     /* Repoert leads conversions */
     public function campaign_report()
     {
+        if ($_GET['account'] == 2) blank_page('SOLAR CAMPAIGN REPORT IS COMING SOON :)');
+
         $this->load->model('leads_model');
         $data['statuses']               = $this->leads_model->get_status();
         $data['leads_this_week_report'] = json_encode($this->reports_model->leads_this_week_report());
@@ -56,6 +58,8 @@ class Reports extends AdminController
 
     public function agent_report()
     {
+        if ($_GET['account'] == 2) blank_page('SOLAR AGENT REPORT IS COMING SOON :)');
+
         $this->load->model('leads_model');
         $data['leads_staff_report'] = json_encode($this->reports_model->leads_staff_report());
         $data['statuses']               = $this->leads_model->get_status();

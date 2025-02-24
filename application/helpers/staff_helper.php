@@ -406,3 +406,35 @@ function is_staff_member($staff_id = '')
 
     return $CI->db->count_all_results(db_prefix() . 'staff') > 0 ? true : false;
 }
+
+/**
+ * Get the account type for the staff member
+ * In the staff profile, there is an option to check IS NOT STAFF MEMBER (e.g., contractor)
+ * Some features are disabled when the user is not a staff member.
+ * @param  string  $staff_id Staff ID
+ * @return int|null Account type or null if not found
+ */
+function get_staff_account_type($staff_id = '')
+{
+    $CI = &get_instance();
+
+    if ($staff_id == '') {
+        if (isset($GLOBALS['current_user'])) {
+            $staff_id = $GLOBALS['current_user']->staffid;
+        } else {
+            $staff_id = get_staff_user_id();
+        }
+    }
+
+    // Query to get the 'account' column value for the staff member
+    $CI->db->select('account');
+    $CI->db->where('staffid', $staff_id);
+    $CI->db->where('is_not_staff', 0);
+    $query = $CI->db->get(db_prefix() . 'staff');
+
+    if ($query->num_rows() > 0) {
+        return $query->row()->account;
+    }
+
+    return null; // Return null if no result is found
+}

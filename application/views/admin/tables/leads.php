@@ -6,7 +6,8 @@ $this->ci->load->model('gdpr_model');
 $this->ci->load->model('leads_model');
 $this->ci->load->model('staff_model');
 
-$statuses = $this->ci->leads_model->get_status();
+$category = $this->ci->session->userdata('category');
+$statuses = $this->ci->leads_model->get_status('', [], $category);
 
 if (is_gdpr() && get_option('gdpr_enable_consent_for_leads') == '1') {
     $consent_purposes = $this->ci->gdpr_model->get_consent_purposes();
@@ -78,7 +79,7 @@ if (isset($consent_purposes)) {
 }
 
 return App_table::find('leads')
-    ->outputUsing(function ($params) use ($statuses) {
+    ->outputUsing(function ($params) use ($statuses, $category) {
         extract($params);
 
         $lockAfterConvert = get_option('lead_lock_after_convert_to_customer');
@@ -141,7 +142,7 @@ return App_table::find('leads')
         $where = [];
 
         // Check if category exists
-        if (!empty($data['category'])) {
+        if (!empty($category)) {
             // If category is set, add it to the WHERE clause with SQL escaping
             $where[] = 'AND (category = ' . $category . ')';
         } else {

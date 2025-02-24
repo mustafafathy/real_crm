@@ -297,8 +297,30 @@
                                 }
                             }
                         }
+
+                        $accounts = [
+                            [
+                                'name' => 'Real State',
+                                'value' => '1'
+                            ],
+                            [
+                                'name' => 'Solar',
+                                'value' => '2'
+                            ],
+                            [
+                                'name' => 'Both',
+                                'value' => '3'
+                            ],
+                            ];
+                        if (isset($member)) {
+                                $accountSelected = $member->account;
+                        } else {
+                            $accountSelected = null;
+                        }
                         ?>
                                 <?php echo render_select('role', $roles, ['roleid', 'name'], 'staff_add_edit_role', $selected); ?>
+                                <hr />
+                                <?php echo render_select('account', $accounts, ['value', 'name'], 'Account', $accountSelected); ?>
                                 <hr />
                                 <h4 class="font-medium mbot15 bold"><?php echo _l('staff_add_edit_permissions'); ?></h4>
                                 <?php

@@ -170,14 +170,13 @@ class Leads_model extends App_Model
         $data['address'] = trim($data['address']);
         $data['address'] = nl2br($data['address']);
 
-        $data['email'] = trim($data['email']);
-
+        // $data['email'] = trim($data['email']);
         if (isset($data['category'])) {
             // If the 'category' is passed in the $data array, use it
             $category = $data['category'];
         } else {
             // If 'category' is not in $data, retrieve it from the session
-            $category = $this->session->userdata('account_category');
+            $category = $this->session->userdata('category');
 
             // Optionally, you can add the category to the $data array for later use
             if ($category) {
@@ -697,12 +696,16 @@ class Leads_model extends App_Model
      * @param  mixed $id Optional - Source ID
      * @return mixed object if id passed else array
      */
-    public function get_source($id = false)
+    public function get_source($id = false, $category = null)
     {
         if (is_numeric($id)) {
             $this->db->where('id', $id);
 
             return $this->db->get(db_prefix() . 'leads_sources')->row();
+        }
+
+        if (isset($category)) {
+            $this->db->where('account', $category);
         }
 
         $this->db->order_by('name', 'asc');
@@ -779,7 +782,7 @@ class Leads_model extends App_Model
      * @param  mixed $id status id
      * @return mixed      object if id passed else array
      */
-    public function get_status($id = '', $where = [])
+    public function get_status($id = '', $where = [], $account = null)
     {
         if (is_numeric($id)) {
             $this->db->where($where);
@@ -790,15 +793,32 @@ class Leads_model extends App_Model
 
         $whereKey = md5(serialize($where));
 
-        $statuses = $this->app_object_cache->get('leads-all-statuses-' . $whereKey);
 
-        if (!$statuses) {
+        $category = [];
             $this->db->where($where);
             $this->db->order_by('statusorder', 'asc');
 
-            $statuses = $this->db->get(db_prefix() . 'leads_status')->result_array();
-            $this->app_object_cache->add('leads-all-statuses-' . $whereKey, $statuses);
-        }
+            switch ($account) {
+                case 3:
+                    $category = ['1', '2'];
+                    break;
+                case 2:
+                    $category = ['2'];
+                    break;
+                case 1:
+                    $category = ['1'];
+                    break;
+                default:
+                    $category = ['1', '2'];
+                    break;
+            } 
+
+            if(is_array($category)) {
+                $statuses = $this->db->where_in('account', $category)->get(db_prefix() . 'leads_status')->result_array();
+            } else {
+                $statuses = $this->db->get(db_prefix() . 'leads_status')->result_array();
+                $this->app_object_cache->add('leads-all-statuses-' . $whereKey, $statuses);
+            }
 
         return $statuses;
     }
@@ -823,7 +843,7 @@ class Leads_model extends App_Model
         } else {
             // Initialize categories
             $categories = [
-                '1' => 'Property',
+                '1' => 'Real State',
                 '2' => 'Solar',
                 // '3' => 'Technology',
                 // '4' => 'Finance'

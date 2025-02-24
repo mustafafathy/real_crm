@@ -6,13 +6,18 @@
             aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">
         <?php 
-            $category = $this->session->userdata('account_category') ? $this->session->userdata('account_category') : '1';
+        $category = $this->session->userdata('category');
+
+        if (!in_array($category, ['1', '2']) || !in_array(get_staff_account_type(), [$category, '3'])) {
+            // ajax_access_denied();
+            blank_page('You are trying to access not existed page!');
+        }
             
 function getCategory($key='')
 {
     // Define the mapping of keys to category names
     $categories = [
-        '1' => 'Property',
+        '1' => 'Real State',
         '2' => 'Solar',
         // '3' => 'Technology',
         // '4' => 'Finance'

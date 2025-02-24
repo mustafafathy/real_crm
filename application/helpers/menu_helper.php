@@ -192,14 +192,111 @@ function app_init_admin_sidebar_menu_items()
         }
     }
 
-    if (is_staff_member()) {
-        $CI->app_menu->add_sidebar_menu_item('leads', [
-            'name'     => _l('Leads Response'),
-            'href'     => admin_url('leads'),
-            'icon'     => 'fa fa-tty',
+
+    if (in_array(get_staff_account_type(), ["1", "3"])) {
+        $CI->app_menu->add_sidebar_menu_item('real state', [
+            'collapse' => true,
+            'name'     => _l('Real State'),
             'position' => 45,
+            'icon'     => 'fa fa-cogs',
             'badge'    => [],
         ]);
+
+        $CI->app_menu->add_sidebar_children_item('real state', [
+            'slug'     => _l('Leads Response'),
+            'name'     => _l('Leads Response'),
+            'href'     => admin_url('leads?account=1'),
+            'position' => 1,
+            'icon'     => 'fa fa-cogs',
+            'badge'    => [],
+        ]);
+
+
+        if (staff_can('view',  'missing_report')) {
+            $CI->app_menu->add_sidebar_children_item('real state', [
+                'slug'     => _l('Missing-Report'),
+                'name'     => _l('Missing Report'),
+                'href'     => admin_url('missingreport/report?account=1'),
+                'icon'     => 'fa-regular fa-chart-bar',
+                'position' => 2,
+                'badge'    => [],
+            ]);
+        }
+
+        if (staff_can('view',  'agent_report')) {
+            $CI->app_menu->add_sidebar_children_item('real state', [
+                'slug'     => _l('Agent-Report'),
+                'name'     => _l('Agent Report'),
+                'href'     => admin_url('reports/agent_report?account=1'),
+                'icon'     => 'fa-solid fa-chart-line',
+                'position' => 3,
+                'badge'    => [],
+            ]);
+        }
+
+        if (staff_can('view',  'campaign_report')) {
+            $CI->app_menu->add_sidebar_children_item('real state', [
+                'slug'     => _l('Campaign-Report'),
+                'name'     => _l('Campaign Report'),
+                'href'     => admin_url('reports/campaign_report?account=1'),
+                'icon'     => 'fa-solid fa-chart-line',
+                'position' => 4,
+                'badge'    => [],
+            ]);
+        }
+    }
+
+    if (in_array(get_staff_account_type(), ["2", "3"])) {
+        $CI->app_menu->add_sidebar_menu_item('solar', [
+            'collapse' => true,
+            'name'     => _l('Solar'),
+            'position' => 46,
+            'icon'     => 'fa fa-cogs',
+            'badge'    => [],
+        ]);
+
+        $CI->app_menu->add_sidebar_children_item('solar', [
+            'slug'     => _l('Leads'),
+            'name'     => _l('Leads'),
+            'href'     => admin_url('leads?account=2'),
+            'position' => 1,
+            'icon'     => 'fa fa-cogs',
+            'badge'    => [],
+        ]);
+
+
+        if (staff_can('view',  'missing_report')) {
+            $CI->app_menu->add_sidebar_children_item('solar', [
+                'slug'     => _l('Missing-Report'),
+                'name'     => _l('Missing Report'),
+                'href'     => admin_url('missingreport/report?account=2'),
+                'icon'     => 'fa-regular fa-chart-bar',
+                'position' => 2,
+                'badge'    => [],
+            ]);
+        }
+
+        if (staff_can('view',  'agent_report')) {
+            $CI->app_menu->add_sidebar_children_item('solar', [
+                'slug'     => _l('Agent-Report'),
+                'name'     => _l('Agent Report'),
+                'href'     => admin_url('reports/agent_report?account=2'),
+                'icon'     => 'fa-solid fa-chart-line',
+                'position' => 3,
+                'badge'    => [],
+            ]);
+        }
+
+        if (staff_can('view',  'campaign_report')) {
+            $CI->app_menu->add_sidebar_children_item('solar', [
+                'slug'     => _l('Campaign-Report'),
+                'name'     => _l('Campaign Report'),
+                'href'     => admin_url('reports/campaign_report?account=2'),
+                'icon'     => 'fa-solid fa-chart-line',
+                'position' => 4,
+                'badge'    => [],
+            ]);
+        }
     }
 
     if ((staff_can('view',  'estimate_request') || staff_can('view_own',  'estimate_request'))) {
@@ -347,34 +444,6 @@ function app_init_admin_sidebar_menu_items()
             'href'     => admin_url('reports/knowledge_base_articles'),
             'position' => 30,
             'badge'    => [],
-        ]);
-    }
-
-	if (staff_can('view',  'missing_report')) {
-        $CI->app_menu->add_sidebar_menu_item('missing_report', [
-            'name'     => _l('Missing Report'),
-            'href'     => admin_url('missingreport/report'),
-            // 'icon'     => 'fa-regular fa-chart-bar',
-            // 'position' => 35,
-            // 'badge'    => [],
-        ]);
-    }
-if (staff_can('view',  'agent_report')) {
-        $CI->app_menu->add_sidebar_menu_item('agent_report', [
-            'name'     => _l('Agent Report'),
-            'href'     => admin_url('reports/agent_report'),
-            // 'icon'     => 'fa-solid fa-chart-line',
-            // 'position' => 40,
-            // 'badge'    => [],
-        ]);
-    }
-if (staff_can('view',  'campaign_report')) {
-        $CI->app_menu->add_sidebar_menu_item('campaign_report', [
-            'name'     => _l('Campaign Report'),
-            'href'     => admin_url('reports/campaign_report'),
-            // 'icon'     => 'fa-solid fa-chart-line',
-            // 'position' => 45,
-            // 'badge'    => [],
         ]);
     }
 

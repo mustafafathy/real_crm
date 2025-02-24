@@ -17,6 +17,13 @@
                   <?php echo render_input('name', 'leads_status_add_edit_name'); ?>
                   <?php echo render_color_picker('color', _l('leads_status_color')); ?>
                   <?php echo render_input('statusorder', 'leads_status_add_edit_order', total_rows(db_prefix() . 'leads_status') + 1, 'number'); ?>
+                  <div class="form-group">
+                			<label for="account"><?php echo _l('Account'); ?></label>
+                			<select name="account" id="account" class="form-control">
+                    			<option value="1"><?php echo _l('Real State'); ?></option>
+                    			<option value="2"><?php echo _l('Solar'); ?></option>
+                			</select>
+                  </div>
                </div>
             </div>
          </div>

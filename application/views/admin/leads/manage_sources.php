@@ -17,9 +17,13 @@
                             <thead>
                                 <th><?php echo _l('id'); ?></th>
                                 <th><?php echo _l('leads_sources_table_name'); ?></th>
+                                <th><?php echo _l('Account'); ?></th>
                                 <th><?php echo _l('options'); ?></th>
                             </thead>
                             <tbody>
+                                <?php
+                                $accounts = [1 => 'Real State', 2 => 'Solar'];
+                                ?>
                                 <?php foreach ($sources as $source) { ?>
                                 <tr>
                                     <td><?php echo e($source['id']); ?></td>
@@ -32,6 +36,9 @@
                                         <span class="text-muted">
                                             <?php echo _l('leads_table_total', total_rows(db_prefix() . 'leads', ['source' => $source['id']])); ?>
                                         </span>
+                                    </td>
+                                    <td>
+                                        <?php echo $accounts[$source['account']]; ?>
                                     </td>
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">
@@ -86,6 +93,13 @@
                 			<select name="active" id="active" class="form-control">
                     			<option value="1"><?php echo _l('Active'); ?></option>
                     			<option value="0"><?php echo _l('Inactive'); ?></option>
+                			</select>
+            			</div>
+                        <div class="form-group">
+                			<label for="account"><?php echo _l('Account'); ?></label>
+                			<select name="account" id="account" class="form-control">
+                    			<option value="1"><?php echo _l('Real State'); ?></option>
+                    			<option value="2"><?php echo _l('Solar'); ?></option>
                 			</select>
             			</div>
                     </div>

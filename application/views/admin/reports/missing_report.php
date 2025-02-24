@@ -1,6 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <link rel="stylesheet" href="<?php echo base_url('assets/tables.css'); ?>">
 
+<?php if ($_GET['account'] == 2) blank_page('SOLAR MISSING REPORT IS COMING SOON :)');?>
 <?php init_head(); ?>
 <?php $today = date('Y-m-d'); ?>
 

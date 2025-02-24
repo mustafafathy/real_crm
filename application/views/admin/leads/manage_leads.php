@@ -11,7 +11,7 @@ $CI->load->library('session');
         <div class="row">
             <div class="col-md-12">
                 <div class="_buttons tw-mb-2 sm:tw-mb-4">
-                    <a href="#" onclick="init_lead(); return false;"
+                    <a href="#" onclick="init_lead(undefined, undefined, <?= $this->session->userdata('category') ?>); return false;"
                         class="btn btn-primary mright5 pull-left display-block">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_lead'); ?>
@@ -62,28 +62,28 @@ $CI->load->library('session');
 
                         <div class="col-sm-6 col-xs-12 pull-right leads-search">
                             <?php
-                            if (count($categories) > 1) {  // Check if there are more than 1 category
-                                // Start rendering the select element manually
-                                // echo '<label for="searchCategorySelect">PipeLine</label>';
-                                echo '<select onchange="leads_kanban();" name="searchCategory" id="searchCategorySelect" class="form-control" style="right: 0; width: 100%; float: right;">';
-                                // Loop through categories to populate options
-                                foreach ($categories as $key => $category) {
-                                    // Check if the category should be pre-selected from session
-                                    if (isset($_SESSION['account_category'])) {
-                                        // Compare session value with the category key (not category name)
-                                        $selected = ($_SESSION['account_category'] == $key) ? 'selected' : '';
-                                    } else {
-                                        // Default value if session is not set
-                                        $selected = ($category == 'solar') ? 'selected' : '';
-                                    }
+                            // if (count($categories) > 1) {  // Check if there are more than 1 category
+                            //     // Start rendering the select element manually
+                            //     // echo '<label for="searchCategorySelect">PipeLine</label>';
+                            //     echo '<select onchange="leads_kanban();" name="searchCategory" id="searchCategorySelect" class="form-control" style="right: 0; width: 100%; float: right;">';
+                            //     // Loop through categories to populate options
+                            //     foreach ($categories as $key => $category) {
+                            //         // Check if the category should be pre-selected from session
+                            //         if (isset($_SESSION['account_category'])) {
+                            //             // Compare session value with the category key (not category name)
+                            //             $selected = ($_SESSION['account_category'] == $key) ? 'selected' : '';
+                            //         } else {
+                            //             // Default value if session is not set
+                            //             $selected = ($category == 'solar') ? 'selected' : '';
+                            //         }
 
-                                    // Echo each option
-                                    echo '<option value="' . $key . '" ' . $selected . '>' . $category . '</option>';
-                                }
+                            //         // Echo each option
+                            //         echo '<option value="' . $key . '" ' . $selected . '>' . $category . '</option>';
+                            //     }
 
 
-                                echo '</select>';
-                            }
+                            //     echo '</select>';
+                            // }
                             if ($this->session->userdata('leads_kanban_view') == 'true') { // Kanban search input
                             
                                 ?>
