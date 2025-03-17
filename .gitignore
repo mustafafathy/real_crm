@@ -1,5 +1,5 @@
 # Ignoring environment-specific config files
-/index.php
+index.php
 /application/config/app-config.php
 /application/config/database.php
 /application/config/autoload.php
