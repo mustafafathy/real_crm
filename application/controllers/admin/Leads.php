@@ -941,6 +941,7 @@ class Leads extends AdminController
         $data['members'] = $this->staff_model->get('', [
             'active' => 1,
             'is_not_staff' => 0,
+            'role' => 1,
         ]);
 
         $data['languages'] = $this->app->get_available_languages();

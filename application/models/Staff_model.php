@@ -359,7 +359,7 @@ class Staff_model extends App_Model
 
             return $staff;
         }
-        $this->db->order_by('firstname', 'desc');
+        $this->db->order_by('firstname', 'asc');
 
         return $this->db->get(db_prefix() . 'staff')->result_array();
     }
