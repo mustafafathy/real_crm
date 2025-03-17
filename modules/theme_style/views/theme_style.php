@@ -150,7 +150,7 @@ $tags = get_styling_areas('tags');
                                        ?>
                                         <hr />
                                         <?php  } ?>
-                                        <div class="modal-content theme_style_modal_example">
+                                        <div class="modal-content custom-modalcontent theme_style_modal_example">
                                             <div class="modal">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"

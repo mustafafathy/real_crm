@@ -34,6 +34,32 @@ function format_task_status($status, $text = false, $clean = false)
     return '<span class="' . $class . '" style="' . $style . '">' . $status_name . '</span>';
 }
 
+function format_task_status2($status, $text = false, $clean = false)
+{
+    if (!is_array($status)) {
+        $status = get_task_status_by_id($status);
+    }
+
+    $status_name = $status['name'];
+
+    $status_name = e(hooks()->apply_filters('task_status_name', $status_name, $status));
+
+    if ($clean == true) {
+        return $status_name;
+    }
+
+    $style = '';
+    $class = '';
+    if ($text == false) {
+        $style = 'color:' . $status['color'] . ';border:none  ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';';
+        $class = 'label';
+    } else {
+        $style = 'color:' . $status['color'] . ';';
+    }
+
+    return '<span class="' . $class . '" style="' . $style . '">' . $status_name . '</span>';
+}
+
 /**
  * Return predefined tasks priorities
  * @return array
@@ -460,6 +486,7 @@ function tasks_summary_data($rel_id = null, $rel_type = null)
         $summary['color']          = $status['color'];
         $summary['name']           = $status['name'];
         $summary['status_id']      = $status['id'];
+        $summary['class'] = strtolower(str_replace(' ', '', $summary['name']));
         $tasks_summary[]           = $summary;
     }
 

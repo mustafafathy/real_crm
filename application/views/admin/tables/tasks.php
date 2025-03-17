@@ -10,6 +10,8 @@ return App_table::find('tasks')
         $tasksPriorities     = get_tasks_priorities();
         $task_statuses = $this->ci->tasks_model->get_statuses();
 
+
+        
         $aColumns = [
             '1', // bulk actions
             db_prefix() . 'tasks.id as id',
@@ -84,7 +86,7 @@ return App_table::find('tasks')
         foreach ($rResult as $aRow) {
             $row = [];
 
-            $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
+            $row[] = '<div class="checkbox table-cbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
 
             $row[] = '<a href="' . admin_url('tasks/view/' . $aRow['id']) . '" onclick="init_task_modal(' . $aRow['id'] . '); return false;">' . $aRow['id'] . '</a>';
 
@@ -130,16 +132,18 @@ return App_table::find('tasks')
                 $outputName .= '<a href="#" class="text-danger tasks-table-stop-timer" onclick="timer_action(this,' . $aRow['id'] . ',' . $aRow['not_finished_timer_by_current_staff'] . '); return false;">' . _l('task_stop_timer') . '</a>';
             } else {
                 $outputName .= '<span' . $tooltip . ' ' . $style . '>
-        <a href="#" class="' . $class . ' tasks-table-start-timer" onclick="timer_action(this,' . $aRow['id'] . '); return false;">' . _l('task_start_timer') . '</a>
+        <a href="#" class="' . $class . ' tasks-table-start-timer" onclick="timer_action(this,' . $aRow['id'] . '); return false;"><i class="fa-solid fa-clock"></i>' . _l('task_start_timer') . '</a>
         </span>';
             }
 
             if ($hasPermissionEdit) {
-                $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="#" onclick="edit_task(' . $aRow['id'] . '); return false">' . _l('edit') . '</a>';
+                // $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="#" onclick="edit_task(' . $aRow['id'] . '); return false">' . _l('edit') . '<i class="fa-solid fa-pen"></i></a> ';
+                $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="#" onclick="edit_task(' . $aRow['id'] . '); return false"> <i class="fa-solid fa-pen"></i></a> ';
             }
 
             if ($hasPermissionDelete) {
-                $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="' . admin_url('tasks/delete_task/' . $aRow['id']) . '" class="text-danger _delete task-delete">' . _l('delete') . '</a>';
+                // $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="' . admin_url('tasks/delete_task/' . $aRow['id']) . '" class="text-danger _delete task-delete">' . _l('delete') . ' <i class="fa-solid fa-trash"></i></a>';
+                $outputName .= '<span class="tw-text-neutral-300"> | </span><a href="' . admin_url('tasks/delete_task/' . $aRow['id']) . '" class="text-danger _delete task-delete"><i class="fa-solid fa-trash"></i></a>';
             }
             $outputName .= '</div>';
 
@@ -149,8 +153,9 @@ return App_table::find('tasks')
             $status          = get_task_status_by_id($aRow['status']);
             $outputStatus    = '';
 
-            $outputStatus .= '<span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '">';
-
+            // $outputStatus .= '<span class="flex-label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '">';
+            $outputStatus .= '<span class="flex-label table-cell status-cell-content" style="color:' . $status['color'] . ';border:1px solid #D3D3D3;" task-status-table="' . e($aRow['status']) . '">';
+            
             $outputStatus .= e($status['name']);
 
             if ($canChangeStatus) {
@@ -185,7 +190,7 @@ return App_table::find('tasks')
 
             $row[] = render_tags($aRow['tags']);
 
-            $outputPriority = '<span style="color:' . e(task_priority_color($aRow['priority'])) . ';" class="inline-block">' . e(task_priority($aRow['priority']));
+            $outputPriority = '<span style="color:' . e(task_priority_color($aRow['priority'])) . '; background:' . e(task_priority_color($aRow['priority'])) . '33;" class="inline-block flex-label priority">' . e(task_priority($aRow['priority']));
 
             if (staff_can('edit',  'tasks') && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
                 $outputPriority .= '<div class="dropdown inline-block mleft5 table-export-exclude">';

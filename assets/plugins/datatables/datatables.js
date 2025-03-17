@@ -79040,6 +79040,7 @@ DataTable.ext.buttons.pdfHtml5 = {
 				tableBodyEven: {},
 				tableBodyOdd: {
 					fillColor: '#f3f3f3'
+          marginBottom:'50px' 
 				},
 				tableFooter: {
 					bold: true,

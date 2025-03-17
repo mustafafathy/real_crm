@@ -5,7 +5,12 @@
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
   border-top: 1px solid theme("colors.neutral.200");
+  
+  
+  
 }
+
+
 .table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 1px solid theme("colors.neutral.200");
@@ -13,7 +18,9 @@
 }
 .table > tbody + tbody {
   border-top: 2px solid theme("colors.neutral.200");
+  
 }
+
 
 .table-bordered {
   border: 1px solid theme("colors.neutral.200");
@@ -354,7 +361,7 @@ table.dataTable tbody td {
 }
 
 table.dataTable thead > tr > th {
-  @apply tw-whitespace-nowrap tw-text-[13.5px] tw-text-neutral-600 tw-bg-neutral-50;
+  /* @apply tw-whitespace-nowrap tw-text-[13.5px] tw-text-neutral-600 tw-bg-neutral-50; */
 }
 
 .table.dataTable > thead:first-child > tr:first-child > th,
@@ -385,6 +392,16 @@ table.dataTable thead > tr > td.sorting_desc {
   background: theme("colors.neutral.100");
   color: theme("colors.neutral.700");
 }
+/* customizable-table.dataTable thead>tr>th.sorting_asc,
+customizable-table.dataTable thead>tr>th.sorting_desc,
+customizable-table.dataTable thead>tr>td.sorting_asc,
+customizable-table.dataTable thead>tr>td.sorting_desc
+customizable-table.dataTable thead>tr>th.sorting_asc{
+  background: black !important;
+  color: white !important;
+
+} */
+
 
 table.dataTable > tbody > tr.danger > td,
 table.dataTable > tbody > tr.danger + tr:not(.danger) > td {

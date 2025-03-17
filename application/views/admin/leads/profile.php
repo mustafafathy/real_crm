@@ -297,7 +297,7 @@
                 </div>
                 <dl>
                     <?php
-            $custom_fields = get_custom_fields('leads');
+            $custom_fields = get_custom_fields('leads', ['pipeline' => $this->session->userdata('category')]);
             foreach ($custom_fields as $field) {
                 $value = get_custom_field_value($lead->id, $field['id'], 'leads'); ?>
                     <dt class="lead-field-heading tw-font-medium tw-text-neutral-500 no-mtop">
@@ -456,7 +456,7 @@
             </div>
             <div class="col-md-12 mtop15">
                 <?php $rel_id = (isset($lead) ? $lead->id : false); ?>
-                <?php echo render_custom_fields('leads', $rel_id); ?>
+                <?php echo render_custom_fields('leads', $rel_id, ['pipeline' => $this->session->userdata('category')]); ?>
             </div>
             <div class="clearfix"></div>
         </div>

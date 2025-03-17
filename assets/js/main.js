@@ -2231,23 +2231,29 @@ $(function () {
 
   table_tasks = $(".table-tasks");
   if (table_tasks.length) {
-    var TasksServerParams = {},
-      Tasks_Filters;
-    Tasks_Filters = $("._hidden_inputs._filters._tasks_filters input");
+    const TasksServerParams = {};
+    const Tasks_Filters = $("#taskStatusFilter");
+
+    // Fetch filters from hidden inputs
     $.each(Tasks_Filters, function () {
-      TasksServerParams[$(this).attr("name")] =
-        '[name="' + $(this).attr("name") + '"]';
+      const filterName = $(this).attr("name");
+      TasksServerParams[filterName] = `[name="${filterName}"]`;
     });
 
-    // Tasks not sortable
-    var tasksTableNotSortable = [0]; // bulk actions
-    var tasksTableURL = admin_url + "tasks/table";
+    // Add the status filter to server parameters
+    TasksServerParams["status"] = "#taskStatusFilter";
 
+    // Define non-sortable columns
+    const tasksTableNotSortable = [0];
+    let tasksTableURL = admin_url + "tasks/table";
+
+    // Check for bulk actions
     if ($("body").hasClass("tasks-page")) {
       tasksTableURL += "?bulk_actions=true";
     }
 
-    _table_api = initDataTable(
+    // Initialize DataTable with dynamic filters
+    const _table_api = initDataTable(
       table_tasks,
       tasksTableURL,
       tasksTableNotSortable,
@@ -2256,6 +2262,7 @@ $(function () {
       [table_tasks.find("th.duedate").index(), "asc"]
     );
 
+    // Visibility adjustments for specific views
     if (_table_api && $("body").hasClass("dashboard")) {
       _table_api
         .column(5)
@@ -2264,6 +2271,7 @@ $(function () {
         .visible(false, false)
         .columns.adjust();
     }
+
   }
 
   // Send file modal populate the hidden files when is shown
@@ -4212,9 +4220,21 @@ function fix_kanban_height(col_px, container_px) {
   $("body").find("div.dt-loader").remove();
   var kanbanCol = $(".kan-ban-content-wrapper");
   kanbanCol.css("max-height", window.innerHeight - col_px + "px");
-  $(".kan-ban-content").css("min-height", window.innerHeight - col_px + "px");
+  $(".kan-ban-content").css("man-height", window.innerHeight - col_px + "px");
   var kanbanColCount = parseInt(kanbanCol.length);
-  $(".container-fluid").css("min-width", kanbanColCount * container_px + "px");
+  $(".container-fluid").css("max-width", kanbanColCount * container_px + "px");
+  // console.log(window.innerHeight); // or
+
+  // console.log(self.innerHeight);
+  // // will log the height of the frame viewport within the frameset
+  
+  // console.log(parent.innerHeight);
+  // // will log the height of the viewport of the closest frameset
+  
+  // console.log(top.innerHeight);
+  // // will log the height of the viewport of the outermost frameset
+  
+
 }
 
 // Kanban load more
@@ -4316,10 +4336,19 @@ function init_kanban(
     }
   });
 
-  var search = $('input[name="search"]').val();
-  if (typeof search != "undefined" && search !== "") {
-    parameters["search"] = search;
-  }
+  // var search = $('select[name="taskStatusFilter"]').val();
+  var user_filter = $('#tasks-switcher').attr('data-user');
+
+  // // console.log(search, user_filter);
+  // if (typeof search != "undefined" && search !== "") {
+
+    if (typeof user_filter != "undefined" && user_filter !== "") {
+        parameters["search"] = '*' + user_filter;
+        console.log(parameters["search"]);
+      }
+      
+  // }
+  // console.log(parameters["search"]);
 
   var sort_type = $('input[name="sort_type"]');
   var sort = $('input[name="sort"]').val();
@@ -4427,6 +4456,9 @@ function init_kanban(
       });
     });
   }, 200);
+}
+function tasks_kanban_sort(type) {
+  kan_ban_sort(type, tasks_kanban);
 }
 
 function kan_ban_sort(type, callback) {
@@ -4827,12 +4859,12 @@ function lead_add_inline_select_submit(type) {
 }
 
 // Init lead for add/edit/view or refresh data
-function init_lead(id, isEdit, type=undefined) {
+function init_lead(id, isEdit) {
   if ($("#task-modal").is(":visible")) {
     $("#task-modal").modal("hide");
   }
   // In case header error
-  if (init_lead_modal_data(id, undefined, isEdit, type)) {
+  if (init_lead_modal_data(id, undefined, isEdit)) {
     $("#lead-modal").modal("show");
   }
 }
@@ -5079,7 +5111,7 @@ function _lead_init_data(data, id) {
 }
 
 // Fetches lead modal data, can be edit/add/view
-function init_lead_modal_data(id, url, isEdit, type) {
+function init_lead_modal_data(id, url, isEdit) {
   var requestURL =
     (typeof url != "undefined" ? url : "leads/lead/") +
     (typeof id != "undefined" ? id : "");
@@ -5091,7 +5123,7 @@ function init_lead_modal_data(id, url, isEdit, type) {
     }
     requestURL += concat + "edit=true";
   }
-  requestURL += '&account=' + type;
+
   requestGetJSON(requestURL)
     .done(function (response) {
       _lead_init_data(response, id);
@@ -6176,6 +6208,211 @@ function reload_tasks_tables() {
     if ($.fn.DataTable.isDataTable(selector)) {
       $(selector).DataTable().ajax.reload(null, false);
     }
+  });
+}
+
+
+/**
+ * Reloads multiple task-related DataTables with dynamic filters.
+ * @param {Object} filters - An object containing filter parameters (e.g., { status: 4, search: 'task' }).
+ */
+function reload_tasks(filters = {}) {
+  // Array of table selectors
+  const av_tasks_tables = [
+    ".table-tasks",
+    ".table-rel-tasks",
+    ".table-rel-tasks-leads",
+    ".table-timesheets",
+    ".table-timesheets-report",
+  ];
+
+  // Loop through each table selector
+  $.each(av_tasks_tables, function (i, selector) {
+    if ($.fn.DataTable.isDataTable(selector)) {
+      const tableInstance = $(selector).DataTable();
+
+      // Apply custom filters to the table's AJAX request
+      tableInstance.settings()[0].ajax.data = function (d) {
+        // Extend DataTables request parameters with custom filters
+        $.extend(d, filters);
+      };
+
+      // Reload the DataTable with new filters without resetting pagination
+      tableInstance.ajax.reload(null, false);
+    }
+  });
+}
+
+function reload_or_filter_tasks_tables(filters = {}, resetPagination = false) {
+  const av_tasks_tables = [
+    ".table-tasks",
+    ".table-rel-tasks",
+    ".table-rel-tasks-leads",
+    ".table-timesheets",
+    ".table-timesheets-report",
+  ];
+  // Build search function based on filters
+  // const searchFn = buildSearchFunction(filters);
+
+  // Iterate through the table selectors
+  $.each(av_tasks_tables, function (i, selector) {
+    if ($.fn.DataTable.isDataTable(selector)) {
+      const tableInstance = $(selector).DataTable();
+      const selectedRows = [];
+
+      // // Extend current AJAX parameters with new filters
+      // tableInstance.settings()[0].ajax.data = function (d) {
+      //   // $.extend(d, buildSearchFunction(filters));
+      //   $.extend(d, filters['search']);
+
+      // };
+      tableInstance.rows().every(function (rowIdx) {
+        const row = tableInstance.row(rowIdx);
+        const rowElement = $(row.node());
+
+        // Get the status cell and extract the `task-status-table` attribute
+        const statusCell = rowElement.find(filters['selector']);
+        const taskStatus = statusCell.attr('task-status-table');
+
+        // Find all image tags in the specified cell using `filter_selector`
+        const imageCells = rowElement.find(filters['filter_selector']);
+
+        // Check if there's at least one image with matching `data-id`
+        const hasMatchingImage = imageCells.filter(function () {
+          const taskUser = $(this).attr('data-id');
+          return taskUser === filters['data_filter'];
+        }).length > 0;
+
+        // Determine if the current row matches the status filter
+        const statusMatches = (taskStatus === filters['search'] || filters['search'] === '');
+
+        // Determine if the current row matches the image filter
+        const imageMatches = (hasMatchingImage || filters['data_filter'] === '');
+
+        // Show the row if both conditions are satisfied
+        if (statusMatches && imageMatches) {
+          selectedRows.push(rowIdx);
+          rowElement.show();
+        } else {
+          rowElement.hide();
+        }
+      });
+      // // Build search function based on filters
+      // const searchFn = buildSearchFunction(filters);
+
+      // console.log(`Applying filters:`);
+      // for (const key in filters) {
+      //   console.log(`  - ${key}: ${filters[key]}`);
+      // }
+
+      // // Apply filters directly
+      // tableInstance
+      // console.log(filters['search']);
+      // console.log(filters);
+      // tableInstance.column(filters['index'])
+      // .search(searchFn)
+      // .draw();
+
+      // Reload the DataTable with new filters
+      // reload_tasks_tables();
+    }
+  });
+} function filter_tasks_tables(filters, resetPagination = true) {
+  const tableSelectors = [
+    ".table-tasks",
+    ".table-rel-tasks",
+    ".table-rel-tasks-leads",
+    ".table-timesheets",
+    ".table-timesheets-report",
+  ];
+
+  // Validate filters object (optional)
+  if (typeof filters !== 'object' || Object.keys(filters).length === 0) {
+    console.warn('filter_tasks_tables: Empty filters object provided.');
+    return;
+  }
+
+  $.each(tableSelectors, function (i, selector) {
+    if ($.fn.DataTable.isDataTable(selector)) {
+      const tableInstance = $(selector).DataTable();
+
+      // Build search function based on filters
+      const searchFn = buildSearchFunction(filters);
+
+      for (const key in filters) {
+        // console.log(`  - ${key}: ${filters[key]}`);
+      }
+
+      // Apply filters directly
+      tableInstance
+        .search(searchFn)
+        .draw(resetPagination ? 'full_redraw' : 'page'); // Reset pagination if needed
+    }
+  });
+}
+
+
+
+// Helper function to build search function based on filters
+function buildSearchFunction(filters) {
+  return function (d) {
+    const rowElement = $(d);
+
+    // Implement search logic based on your specific filters (e.g., status, search term)
+    // This example demonstrates filtering by status:
+    const status = rowElement.find('span.flex-label.table-cell.status-cell-content').attr('task-status-table');
+
+    if (status !== filters['search']) {
+      return false; // Exclude rows if status doesn't match
+    }
+
+    // You can add additional filter conditions for other properties in the `filters` object
+
+    return true; // Include the row if all filters pass
+  };
+}
+/**
+ * Reloads or filters task-related DataTables dynamically with data from the controller.
+ * @param {Object} filters - An object containing filter parameters (e.g., { status: 4, search: 'task' }).
+ * @param {Boolean} resetPagination - If true, resets pagination; otherwise keeps the current page.
+ */
+function fetch_tasks_tables(filters = {}) {
+  const av_tasks_tables = [
+    ".table-tasks",
+    ".table-rel-tasks",
+    ".table-rel-tasks-leads",
+    ".table-timesheets",
+    ".table-timesheets-report",
+  ];
+  // console.log(filters['status'])
+  // Fetch additional data from controller URL `get_tasks_by_status`
+  $.ajax({
+    url: admin_url + "tasks/get_tasks_by_status/" + filters['status'],
+    type: "GET",
+    // data: filters['status'], // Send current filters to the backend
+    dataType: "json",
+    success: function (response) {
+      // Merge the response data with existing filters
+      const combinedFilters = $.extend({}, filters, response.data);
+
+      // Iterate through the table selectors
+      $.each(av_tasks_tables, function (i, selector) {
+        if ($.fn.DataTable.isDataTable(selector)) {
+          const tableInstance = $(selector).DataTable();
+
+          // Update AJAX data function with combined filters
+          tableInstance.settings()[0].ajax.data = function (d) {
+            $.extend(d, combinedFilters);
+          };
+
+          // Reload the DataTable with updated filters
+          tableInstance.ajax.reload(null, false);
+        }
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error("Failed to fetch data from get_tasks_by_status:", error);
+    },
   });
 }
 

@@ -3558,20 +3558,6 @@ a._timer:focus {
   border-bottom: 0 !important;
 }
 
-#completed_label:before {
-  display: inline-block;
-  font-family: FontAwesome;
-  content: '\f091';
-  padding-right: 1rem;
-}
-
-#overCompleted_label:before {
-  display: inline-block;
-  font-family: FontAwesome;
-  content: '\f005';
-  padding-right: 1rem;
-}
-
 .project_progress_slider_horizontal {
   height: 20px;
 }
@@ -4161,26 +4147,18 @@ li.task.overdue-task .panel-body {
 
 #toplink,
 #botlink {
-	position: fixed;
-    width: 10px;
-    right: 3%;
-    bottom: 50%;
-    padding: 10px;
-    margin: 0 -20px 0 0;
-    color: #475569;
-    background: #f1f5f9;
-    font-size: 1.5em;
-    border: 1px solid #cbd5e1;
-    border-bottom: 1px solid #cbd5e1;
-    border-radius: 6px 6px 0 0;
-    z-index: 99;
-    align-content: center;
-    justify-content: center;
-    font-stretch: ultra-expanded;
-    font-family: auto;
-    text-align: center;
-    text-anchor: middle;
-    display: flex;
+  position: fixed;
+  right: 7.5%;
+  bottom: 50%;
+  padding: 10px;
+  margin: 0 -20px 0 0;
+  color: #475569;
+  background: #f1f5f9;
+  font-size: 1.5em;
+  border: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  border-radius: 6px 6px 0 0;
+  z-index: 99;
 }
 
 #botlink {
@@ -5248,11 +5226,6 @@ div[contenteditable]:focus {
 .inline-field-new:hover,
 .inline-field-new:active {
   color: #334155;
-}
-
-.logo-class {
-  max-width: 200px;
-  max-height: 100px;
 }
 
 @media (min-width: 768px) {
