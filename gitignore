@@ -1,5 +1,4 @@
 # Ignoring environment-specific config files
-index.php
 /application/config/app-config.php
 /application/config/database.php
 /application/config/autoload.php
@@ -19,3 +18,5 @@ index.php
 # Ignoring vendor directory for Composer dependencies
 /vendor/
 
+# Ignoring the main entry point (index.php)
+index.php
