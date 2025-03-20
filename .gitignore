@@ -20,3 +20,6 @@
 
 # Ignoring the main entry point (index.php)
 index.php
+application/config/app-config.php
+index.php
+index.php
